@@ -18,6 +18,8 @@
             <option value = "rectangle"> Rectángulo </option>
             <option value = "drawBezier"> Curva de Bezier </option>
         </select>
+        <label for="fillShape"> Rellenar figuras </label>
+<input type="checkbox" id="fillShape">
 
         <label for = "colorPicker"> Color: </label>
         <input type = "color" id="colorPicker" value="#000000">
@@ -26,18 +28,12 @@
         <div id="preview" style="width: 40px; height: 40px; background-color: #000000; border-radius: 50%;"></div>
         <label for = "lineWidth"> Grosor: </label>
         <input type = "number" id = "lineWidth" value="2" min="1" max="20">
-        
-        
-        
-        
         <button id="clearCanvas">Borrar lienzo</button>
-
         <button id="downloadImage"> Descargar imagen</button>
-
         <button id="toggleDarkMode"> Modo Obscuro </button>
     </div>
 
-    <canvas id="myCanvas" width="800" height="600"></canvas> <!-- Área de dibujo -->
+    <canvas id="myCanvas" width="800" height="600"></canvas> 
     
     <script src="script.js"></script>
 </body>
