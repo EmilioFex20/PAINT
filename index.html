@@ -7,20 +7,27 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="controls"> <!-- Controles para botones -->
-        <button id="red">Rojo</button>
-        <button id="green">Verde</button>
-        <button id="blue">Azul</button>
-        <input type="range" id="lineWidth" min="1" max="10" value="3"> Grosor del trazo
-        <button id="clearCanvas">Borrar Todo</button>
-        <button id="drawBezier">Dibujar Curva de Bézier</button>
-        <button id="freeDraw">Dibujo Libre</button>
-        <button id="circleMode">Círculo</button>
-        <button id="rectangleMode">Rectángulo</button>
-        <input type="checkbox" id="fillShape"> Fondo
+    <h3> Opciones de dibujo</h3>
+    <div class="controls"> 
+        <label for="drawMode"> Modo de dibujo: </label>
+        <select id="drawMode">
+            <option value = "free"> Dibujo libre </option>
+            <option value = "line"> Linea recta </option>
+            <option value = "circle"> Circulo </option>
+            <option value = "rectangle"> Rectángulo </option>
+            <option value = "drawBezier"> Curva de Bezier </option>
+        </select>
+
+        <button id="clearCanvas">Borrar lienzo</button>
+
+        <label for = "colorPicker"> Color: </label>
+        <input type = "color" id="colorPicker" value="#000000">
+
+        <label for = "lineWidth"> Grosor del trazo: </label>
+        <input type = "number" id = "lineWidth" value="2" min="1" max="20">
     </div>
 
-    <canvas id="myCanvas" width="600" height="400"></canvas> <!-- Área de dibujo -->
+    <canvas id="myCanvas" width="800" height="600"></canvas> <!-- Área de dibujo -->
     
     <script src="script.js"></script>
 </body>
