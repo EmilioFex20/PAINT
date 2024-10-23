@@ -3,9 +3,11 @@ const ctx = canvas.getContext('2d');
 let points = [];
 let maxControlPoints = 3;
 
-let drawing = false; // Bandera para saber si el usuario está dibujando
-let lastX = 0, lastY = 0; // Para rastrear la última posición del ratón
-let bezierMode = false; // Bandera para el modo de curvas de Bézier
+let drawing = false;
+let bezierMode = false; // Modo Bézier
+let shapeMode = 'free'; // Modos: 'free', 'circle', 'rectangle'
+let fillShape = false; // Opción para rellenar la figura
+let startX = 0, startY = 0; // Para rastrear la posición inicial al dibujar formas
 
 // Cambiar el color del trazo al presionar un botón
 document.getElementById('red').addEventListener('click', () => {
@@ -23,7 +25,7 @@ document.getElementById('lineWidth').addEventListener('input', (e) => {
     ctx.lineWidth = e.target.value;
 });
 
-// Evento para borrar todo el lienzo
+// Borrar todo el lienzo
 document.getElementById('clearCanvas').addEventListener('click', () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas
     points = []; // Limpiar los puntos de control si se está en modo Bézier
@@ -33,6 +35,7 @@ document.getElementById('clearCanvas').addEventListener('click', () => {
 document.getElementById('drawBezier').addEventListener('click', () => {
     bezierMode = !bezierMode; // Alternar el modo de curvas de Bézier
     points = []; // Reiniciar los puntos de control
+    shapeMode = 'free'; // Al usar Bézier, se desactivan los otros modos
     if (bezierMode) {
         document.getElementById('drawBezier').textContent = 'Modo Bézier: Activado';
     } else {
@@ -40,7 +43,6 @@ document.getElementById('drawBezier').addEventListener('click', () => {
     }
 });
 
-// Evento para registrar puntos de control con el mouse en modo Bézier
 canvas.addEventListener('click', (e) => {
     if (bezierMode) {
         if (points.length < maxControlPoints) {
@@ -66,27 +68,66 @@ canvas.addEventListener('click', (e) => {
     }
 });
 
-// Eventos para el dibujo normal fuera del modo Bézier
+// Cambiar el modo de dibujo
+document.getElementById('freeDraw').addEventListener('click', () => {
+    shapeMode = 'free';
+    bezierMode = false;
+});
+document.getElementById('circleMode').addEventListener('click', () => {
+    shapeMode = 'circle';
+    bezierMode = false;
+});
+document.getElementById('rectangleMode').addEventListener('click', () => {
+    shapeMode = 'rectangle';
+    bezierMode = false;
+});
+
+// Alternar el fondo para figuras
+document.getElementById('fillShape').addEventListener('change', (e) => {
+    fillShape = e.target.checked;
+});
+
+// Evento al presionar el ratón
 canvas.addEventListener('mousedown', (e) => {
-    if (!bezierMode) { // Solo dibujar si no estamos en modo Bézier
+    if (!bezierMode) {
         drawing = true;
-        [lastX, lastY] = [e.offsetX, e.offsetY]; // Guardar la posición inicial
+        [startX, startY] = [e.offsetX, e.offsetY]; // Guardar la posición inicial
     }
 });
 
-canvas.addEventListener('mouseup', () => {
+canvas.addEventListener('mouseup', (e) => {
     if (!bezierMode) {
         drawing = false;
+
+        if (shapeMode === 'circle') {
+            const radius = Math.sqrt(Math.pow(e.offsetX - startX, 2) + Math.pow(e.offsetY - startY, 2));
+            ctx.beginPath();
+            ctx.arc(startX, startY, radius, 0, Math.PI * 2);
+            if (fillShape) {
+                ctx.fillStyle = ctx.strokeStyle; // Usar el mismo color para el fondo
+                ctx.fill();
+            }
+            ctx.stroke();
+        } else if (shapeMode === 'rectangle') {
+            const width = e.offsetX - startX;
+            const height = e.offsetY - startY;
+            if (fillShape) {
+                ctx.fillStyle = ctx.strokeStyle; // Usar el mismo color para el fondo
+                ctx.fillRect(startX, startY, width, height);
+            }
+            ctx.strokeRect(startX, startY, width, height);
+        }
     }
 });
 
+// Evento para dibujar en movimiento en modo libre
 canvas.addEventListener('mousemove', (e) => {
-    if (!drawing || bezierMode) return; // Si no estamos dibujando o estamos en modo Bézier, salir de la función
+    if (!drawing || bezierMode || shapeMode !== 'free') return;
     ctx.beginPath();
-    ctx.moveTo(lastX, lastY); // Moverse a la última posición
-    ctx.lineTo(e.offsetX, e.offsetY); // Dibujar hasta la nueva posición
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(e.offsetX, e.offsetY);
     ctx.stroke();
-    [lastX, lastY] = [e.offsetX, e.offsetY]; // Actualizar la última posición
+    [startX, startY] = [e.offsetX, e.offsetY];
 });
 
 // Establecer propiedades del trazo
