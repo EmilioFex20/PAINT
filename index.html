@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h3> Opciones de dibujo</h3>
+    <h2>PAINT</h2>
     <div class="controls"> 
         <label for="drawMode"> Modo de dibujo: </label>
         <select id="drawMode">
@@ -18,13 +18,22 @@
             <option value = "drawBezier"> Curva de Bezier </option>
         </select>
 
-        <button id="clearCanvas">Borrar lienzo</button>
-
         <label for = "colorPicker"> Color: </label>
         <input type = "color" id="colorPicker" value="#000000">
-
-        <label for = "lineWidth"> Grosor del trazo: </label>
+        <div id="colorDisplay" class="color-display"></div>
+        <div id="strokePreview" class="stroke-preview"></div>
+        <div id="preview" style="width: 40px; height: 40px; background-color: #000000; border-radius: 50%;"></div>
+        <label for = "lineWidth"> Grosor: </label>
         <input type = "number" id = "lineWidth" value="2" min="1" max="20">
+        
+        
+        
+        
+        <button id="clearCanvas">Borrar lienzo</button>
+
+        <button id="downloadImage"> Descargar imagen</button>
+
+        <button id="toggleDarkMode"> Modo Obscuro </button>
     </div>
 
     <canvas id="myCanvas" width="800" height="600"></canvas> <!-- Área de dibujo -->

@@ -24,6 +24,13 @@ document.getElementById('clearCanvas').addEventListener('click', () => {
     points = []; // Limpiar puntos de control para el modo Bézier
 });
 
+document.getElementById('downloadImage').addEventListener('click', () =>{
+    const link = document.createElement('a');
+    link.download = 'mi_dibujo.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+});
+
 // Cambiar el modo de dibujo
 document.getElementById('drawMode').addEventListener('change', (e) => {
     shapeMode = e.target.value;
@@ -123,6 +130,17 @@ function drawBezier() {
     points = []; // Reiniciar puntos después de dibujar la curva
 }
 
+const colorPickers = document.getElementById('colorPicker');
+const preview = document.getElementById('preview');
+    
+    colorPicker.addEventListener('input', () => {
+        preview.style.backgroundColor = colorPickers.value;
+    });
+
+const toggleButton = document.getElementById('toggleDarkMode');
+toggleButton.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+});
 // Establecer propiedades del trazo
 ctx.lineWidth = 3;
 ctx.lineCap = 'round';
