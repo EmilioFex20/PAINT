@@ -1,8 +1,9 @@
 const canvas = document.getElementById('myCanvas'); // Obtener el canvas
 const ctx = canvas.getContext('2d'); // Obtener el contexto del canvas
 
-let drawing = false; // Bandera para saber si el usuario está dibujando
-let lastX = 0, lastY = 0; // Para rastrear la última posición del ratón
+let isDrawing = false; // Bandera para saber si el usuario está dibujando
+let startX = 0;
+let startY = 0;
 
 // Cambiar el color del trazo al presionar un botón
 document.getElementById('red').addEventListener('click', () => {
@@ -29,18 +30,35 @@ document.getElementById('clearCanvas').addEventListener('click', () => {
 
 // Evento al presionar el ratón
 canvas.addEventListener('mousedown', (e) => {
-    drawing = true; // Activar la bandera de dibujo
-    [lastX, lastY] = [e.offsetX, e.offsetY]; // Guardar la posición inicial
+    isDrawing = true;
+    startX = e.offsetX;
+    startY = e.offsetY;
 });
 
 // Evento al soltar el ratón
-canvas.addEventListener('mouseup', () => {
-    drawing = false; // Desactivar la bandera de dibujo
+canvas.addEventListener('mouseup', (e) => {
+    if (isDrawing){
+        drawLine(startX, startY, e.offsetX, e.offsetY);
+        isDrawing = false;
+    }
 });
+
+// Si el usuario cancela antes de terminar la línea
+canvas.addEventListener('mouseleave', () => {
+    isDrawing = false;
+});
+
+// Función para dibujar la línea
+function drawLine(x1, y1, x2, y2) {
+    ctx.beginPath();
+    ctx.moveTo(x1, y1); // Mueve el lápiz al punto de inicio
+    ctx.lineTo(x2, y2); // Dibuja la línea hasta el punto final
+    ctx.stroke(); // Dibuja la línea en el canvas
+}
 
 // Evento al mover el ratón
 canvas.addEventListener('mousemove', (e) => {
-    if (!drawing) return; // Si no estamos dibujando, salimos de la función
+    if (!isDrawing) return; // Si no estamos dibujando, salimos de la función
     ctx.beginPath(); // Comenzar un nuevo camino
     ctx.moveTo(lastX, lastY); // Moverse a la última posición
     ctx.lineTo(e.offsetX, e.offsetY); // Dibujar hasta la nueva posición
