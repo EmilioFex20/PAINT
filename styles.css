@@ -1,7 +1,10 @@
 #myCanvas {
-    border: 1px solid black; /* Borde para el canvas */
-    cursor: crosshair;       /* Cambiar el cursor para indicar dibujo */
+    border: 1px solid black; 
+    margin-top: 10 px;
+    cursor: crosshair;       
 }
 .controls {
-    margin-bottom: 10px;     /* Separación entre controles y canvas */
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
 }
