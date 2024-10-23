@@ -9,6 +9,14 @@ document.getElementById('red').addEventListener('click', () => {
 ctx.strokeStyle = 'red';
 });
 
+document.getElementById('green').addEventListener('click', () => {
+ctx.strokeStyle = 'green';
+});
+
+document.getElementById('blue').addEventListener('click', () => {
+    ctx.strokeStyle = 'blue';
+});
+
 // Cambiar el grosor del trazo
 document.getElementById('lineWidth').addEventListener('input', (e) => {
 ctx.lineWidth = e.target.value;
