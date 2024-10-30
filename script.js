@@ -5,9 +5,10 @@ let drawing = false;
 let shapeMode = 'free';
 let startX = 0, startY = 0;
 let points = [];
-let maxControlPoints = 3;
+let maxControlPoints = 4; // Para la curva cúbica
 let fillShape = false;
 let bezierMode = false;
+let quadraticMode = false;
 
 const colorPicker = document.getElementById('colorPicker');
 const lineWidthInput = document.getElementById('lineWidth');
@@ -23,7 +24,7 @@ document.getElementById('clearCanvas').addEventListener('click', () => {
     points = []; 
 });
 
-document.getElementById('downloadImage').addEventListener('click', () =>{
+document.getElementById('downloadImage').addEventListener('click', () => {
     const link = document.createElement('a');
     link.download = 'mi_dibujo.png';
     link.href = canvas.toDataURL('image/png');
@@ -32,7 +33,8 @@ document.getElementById('downloadImage').addEventListener('click', () =>{
 
 document.getElementById('drawMode').addEventListener('change', (e) => {
     shapeMode = e.target.value;
-    bezierMode = (shapeMode === 'drawBezier');
+    bezierMode = (shapeMode === 'drawBezierCubic');
+    quadraticMode = (shapeMode === 'drawBezierQuadratic');
     points = []; 
 });
 
@@ -40,22 +42,23 @@ fillShapeCheckbox.addEventListener('change', (e) => {
     fillShape = e.target.checked; 
 });
 
-
 canvas.addEventListener('mousedown', (e) => {
     drawing = true;
     [startX, startY] = [e.offsetX, e.offsetY]; 
     if (shapeMode === 'free') {
         ctx.beginPath();
         ctx.moveTo(startX, startY);
-    } else if (shapeMode === 'drawBezier' && points.length < maxControlPoints) {
+    } else if ((bezierMode || quadraticMode) && points.length < maxControlPoints) {
         points.push({ x: e.offsetX, y: e.offsetY });
         ctx.beginPath();
         ctx.arc(e.offsetX, e.offsetY, 3, 0, Math.PI * 2);
         ctx.fillStyle = 'black';
         ctx.fill();
         ctx.stroke();
-        if (points.length === maxControlPoints) {
-            drawBezier();
+        if (bezierMode && points.length === 4) {
+            drawBezierCubic();
+        } else if (quadraticMode && points.length === 3) {
+            drawBezierQuadratic();
         }
     }
 });
@@ -116,11 +119,20 @@ function drawRectangle(x1, y1, x2, y2) {
     ctx.strokeRect(x1, y1, width, height);
 }
 
-function drawBezier() {
+function drawBezierCubic() {
     setDrawingStyle();
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
-    ctx.bezierCurveTo(points[1].x, points[1].y, points[2].x, points[2].y, points[2].x, points[2].y);
+    ctx.bezierCurveTo(points[1].x, points[1].y, points[2].x, points[2].y, points[3].x, points[3].y);
+    ctx.stroke();
+    points = [];
+}
+
+function drawBezierQuadratic() {
+    setDrawingStyle();
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    ctx.quadraticCurveTo(points[1].x, points[1].y, points[2].x, points[2].y);
     ctx.stroke();
     points = [];
 }
@@ -128,9 +140,9 @@ function drawBezier() {
 const colorPickers = document.getElementById('colorPicker');
 const preview = document.getElementById('preview');
     
-    colorPicker.addEventListener('input', () => {
-        preview.style.backgroundColor = colorPickers.value;
-    });
+colorPicker.addEventListener('input', () => {
+    preview.style.backgroundColor = colorPickers.value;
+});
 
 const toggleButton = document.getElementById('toggleDarkMode');
 toggleButton.addEventListener('click', () => {
