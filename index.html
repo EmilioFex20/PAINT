@@ -7,15 +7,35 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="controls"> <!-- Controles para botones -->
-        <button id="red">Rojo</button>
-        <button id="green">Verde</button>
-        <button id="blue">Azul</button>
-        <input type="range" id="lineWidth" min="1" max="10" value="3"> Grosor del trazo
-        <button id="clearCanvas">Borrar Todo</button>
+    <h2>PAINT</h2>
+    <h4>Emilio Fernandez y Aarian Arredondo</h4>
+    <div class="controls"> 
+        <label for="drawMode"> Modo de dibujo: </label>
+        <select id="drawMode">
+            <option value = "free"> Dibujo libre </option>
+            <option value = "line"> Linea recta </option>
+            <option value = "circle"> Circulo </option>
+            <option value = "rectangle"> Rectángulo </option>
+            <option value = "drawBezierQuadratic"> Curva de Bezier Cúbica </option>
+            <option value = "drawBezierCubic"> Curva de Bezier Cuadrática </option>
+
+        </select>
+        <label for="fillShape"> Rellenar figuras </label>
+<input type="checkbox" id="fillShape">
+
+        <label for = "colorPicker"> Color: </label>
+        <input type = "color" id="colorPicker" value="#000000">
+        <div id="colorDisplay" class="color-display"></div>
+        <div id="strokePreview" class="stroke-preview"></div>
+        <div id="preview" style="width: 40px; height: 40px; background-color: #000000; border-radius: 50%;"></div>
+        <label for = "lineWidth"> Grosor: </label>
+        <input type = "number" id = "lineWidth" value="2" min="1" max="20">
+        <button id="clearCanvas">Borrar lienzo</button>
+        <button id="downloadImage"> Descargar imagen</button>
+        <button id="toggleDarkMode"> Modo Obscuro </button>
     </div>
 
-    <canvas id="myCanvas" width="600" height="400"></canvas> <!-- Área de dibujo -->
+    <canvas id="myCanvas" width="800" height="600"></canvas> 
     
     <script src="script.js"></script>
 </body>
